@@ -1,5 +1,6 @@
 Connected graph with a central node (A) connected to all other nodes (B, C, D, E):
 
+```py
 A - B
 | \ |
 C - D
@@ -10,3 +11,4 @@ graph = {
     'C': ['A', 'B', 'D'],
     'D': ['A', 'B', 'C']
 }
+```

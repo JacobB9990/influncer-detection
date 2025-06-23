@@ -1,5 +1,6 @@
-Simple star graph with 5 nodes:
+**Simple star graph with 5 nodes:**
 
+```py
     B
     |
 D - A - C
@@ -13,3 +14,4 @@ graph = {
     'D': ['A'],
     'E': ['A']
 }
+```
