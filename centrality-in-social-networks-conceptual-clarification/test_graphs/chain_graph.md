@@ -1,5 +1,6 @@
 Simple chain graph with 5 nodes:
 
+```py
 A - B - C - D - E
 
 graph = {
@@ -9,3 +10,4 @@ graph = {
     'D': ['C', 'E'],
     'E': ['D']
 }
+```
