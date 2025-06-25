@@ -2,7 +2,7 @@
 
 ```py
 A - B
-| \ |
+| X |
 C - D
 
 graph = {
