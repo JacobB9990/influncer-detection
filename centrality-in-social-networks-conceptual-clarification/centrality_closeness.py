@@ -56,6 +56,7 @@ def closeness_centrality(G: Graph) -> Dict[str, float]:
             centrality[node] = 0.0
     return centrality
 
+print("Closeness Centrality Results:")
 for name, G in [("Star", G_star), ("Chain", G_chain), ("Clique", G_clique)]:
     print(f"\n{name} graph:")
     results = closeness_centrality(G)

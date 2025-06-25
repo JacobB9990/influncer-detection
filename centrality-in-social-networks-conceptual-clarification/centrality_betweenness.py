@@ -68,9 +68,9 @@ def degree_betweenness(graph: Graph, normalize: bool = False):
             centrality[node] /= (n - 1) * (n - 2) / 2
     return centrality
 
-
+print("Degree Betweenness Centrality Results:")
 for name, G in [("Star", G_star), ("Chain", G_chain), ("Clique", G_clique)]:
     print(f"\n{name} graph:")
-    results = degree_betweenness(G, normalize=True)
+    results = degree_betweenness(G, normalize=False)
     for node, centrality in results.items():
         print(f"Node {node}: {centrality:.2f}")

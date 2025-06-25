@@ -39,9 +39,9 @@ def degree_centrality(graph: Graph, normalize: bool = False) -> Dict[str, float]
             centrality[node] = degree
     return centrality
 
-
+print("Degree Centrality Results:")
 for name, G in [('Star', G_star), ('Chain', G_chain), ('Clique', G_clique)]:
     print(f'\n{name} graph:')
-    results = degree_centrality(G, normalize=True)
+    results = degree_centrality(G, normalize=False)
     for node, centrality in results.items():
         print(f'Node {node}: {centrality:.2f}')
