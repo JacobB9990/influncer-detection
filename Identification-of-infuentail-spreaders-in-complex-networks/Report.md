@@ -18,7 +18,7 @@ I analyze the email-Eu-core network, representing email communication in a Europ
 - Edges: 25571  
 - Undirected and unweighted
 
-Note we had to remove self loops.
+*Note: we had to remove self loops.*
 
 ## 3. SIR Diffusion Model
 
