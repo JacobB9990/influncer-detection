@@ -13,11 +13,11 @@ def generate_graph(n: int = 100, m: int = 2) -> nx.DiGraph:
     for node in directed_G.nodes():
         in_edges = list(directed_G.in_edges(node))
         total = len(in_edges)
-        for u, v in in_edges:
+        for source_node, target_node in in_edges:
             if total > 0:
-                directed_G[u][v]["weight"] = 1 / total
+                directed_G[source_node][target_node]["weight"] = 1 / total
             else:
-                directed_G[u][v]["weight"] = 0.0
+                directed_G[source_node][target_node]["weight"] = 0.0
 
     return directed_G
 
@@ -40,25 +40,24 @@ def display_graph(G: nx.DiGraph) -> None:
 if __name__ == "__main__":
     # You can adjust these parameters as needed, but be careful with large values
     # as they can lead to long computation times. I will add parallelization later.
-    n = 100
-    m = 2
-    k = 4
-    simulations = 1000
+    NODES = 100
+    EDGES_PER_NODE = 2
+    NUM_SEEDS = 4
+    NUM_SIMULATIONS = 1000
 
     try:
-        G = generate_graph(n, m)
-        
+        G = generate_graph(NODES, EDGES_PER_NODE)
+
         print("Independent Cascade Model Simulation: ")
-        independent_cascade.run_simulation(n, m, k, simulations, G)
+        independent_cascade.run_simulation(NODES, EDGES_PER_NODE, NUM_SEEDS, NUM_SIMULATIONS, G)
         print("\nLinear Threshold Model Simulation: ")
-        linear_threshold .run_simulation(n, m, k, simulations, G)
+        linear_threshold.run_simulation(NODES, EDGES_PER_NODE, NUM_SEEDS, NUM_SIMULATIONS, G)
         print("\nPageRank Model Simulation: ")
-        page_rank.run_simulation(n, m, k, simulations, G)
-        
+        page_rank.run_simulation(NODES, EDGES_PER_NODE, NUM_SEEDS, NUM_SIMULATIONS, G)
+
         display_graph(G)
-        
-        
-    except KeyboardInterrupt:
+
+    except KeyboardInterrupt: 
         print("Simulation interrupted by user.")
     # except Exception as e:
     #     print(f"An error occurred: {e}")
