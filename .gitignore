@@ -195,3 +195,5 @@ cython_debug/
 
 test.py
 PersonalNotes.md
+ReportWriting.md
+pagerank_google.py
