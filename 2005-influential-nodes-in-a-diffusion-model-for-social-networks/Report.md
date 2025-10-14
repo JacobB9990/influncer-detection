@@ -1,0 +1,3 @@
+# Influential Nodes in a Diffusion Model for Social Networks
+
+This work was implemented in: `/2003-maximizing-the-spread-of-influence-through-a-social-network`. In this paper they formal introduced the General Threshold Model, which is a family of models. The core intuition/motivation stems from the recognition that individuals decisions are strongly influenced by their social contacts. They say targeting specific set of people to spread influence rather than 
