@@ -68,10 +68,10 @@ The mathematical beauty here is that the same framework works for both water con
 The goal of CELF is to pick $k$ nodes that can detect or cover as much of the networks "spread" as possible, given a cost budget. In my chosen data set a **S**tanford **N**etwork **A**nalysis **P**latform (SNAP) Facebook network we have *4,039* **Nodes** and *88,234* **Edges**. We want to find the node, a user, who would be the best at covering the networks spread while introducing a cost budget. 
 
 ### The Algorithm Steps 
-1. Initialize: Compute all solo gains once
-2. Lazy Loop: Only recompute **top** candidate's gain each round
-3. Two Strategies: Run greedy with AND without cost consideration  
-4. Pick Best: Choose the solution with higher spread
+1. **Initialize**: Compute all solo gains once
+2. **Lazy Loop**: Only recompute **top** candidate's gain each round
+3. **Two Strategies**: Run greedy with AND without cost consideration  
+4. **Pick Best**: Choose the solution with higher spread
 
 The key here is recomputing the **top** candidate's gain rather than all of them like in the basic greedy algorithm. this is what makes this algorithm **700x** faster. This dramatic speed up comes from avoiding redundant calculations. CELF only chooses the most promising candidates.
 
