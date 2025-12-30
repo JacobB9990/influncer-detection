@@ -200,3 +200,5 @@ pagerank_google.py
 CytoScapeSession.cys
 LazyForwardParallel.py
 CELF_C_Parallel.py
+mainCELF.py
+notes.md

@@ -123,7 +123,7 @@ def CELF_C(flat_adj, start_idx, budget=30.0, MC_init=10, MC_final=100, p=0.1):
     
     return set(selected), total_cost, current_spread
 
-def main(path, budget = 5, MC_init = 100, MC_final = 1000, p = 0.1):
+def main(path, budget = 30.0, MC_init = 100, MC_final = 1000, p = 0.1):
     path_to_list = path
 
     print("Building adjacency list...")
@@ -138,14 +138,27 @@ def main(path, budget = 5, MC_init = 100, MC_final = 1000, p = 0.1):
     print(f"Total cost: {total_cost:.2f}")
     print(f"Estimated spread: {spread:.2f}")
     print(f"Elapsed time: {time.time() - start_time:.2f} seconds")
-    return chosen_nodes, total_cost, spread
     
-if __name__ == "__main__":
+if __name__ == "__main__": # I have it this way to make a benchmark later on.
+    np.random.seed(42)
     path = "2007-cost-effective-outbreak-detection-in-networks/facebook_combined.txt"
     # Parameters
     budget = 30.0      # Total budget
     MC_init = 100      # MC for lazy recomputations
-    MC_final = 1000    # MC for final spread estimates
+    MC_final = 1000   # MC for final spread estimates
     p = 0.1            # Transmission probability
 
-    main()
+    path_to_list = path
+
+    print("Building adjacency list...")
+    start_time = time.time()
+    adj = build_adj_list(path_to_list)
+    flat_adj, start_idx = flatten_adj_list(adj)
+
+    print("Running CELF-C...")
+    chosen_nodes, total_cost, spread = CELF_C(flat_adj, start_idx, budget, MC_init, MC_final, p)
+
+    print("\nChosen nodes:", chosen_nodes)
+    print(f"Total cost: {total_cost:.2f}")
+    print(f"Estimated spread: {spread:.2f}")
+    print(f"Elapsed time: {time.time() - start_time:.2f} seconds")

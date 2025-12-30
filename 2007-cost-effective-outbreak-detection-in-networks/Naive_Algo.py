@@ -1,11 +1,8 @@
 import numpy as np
-import heapq
-from numba import njit, prange
+from numba import njit
 from tqdm import tqdm
 import time
 
-
-# Make our graph
 def build_adj_list(edge_list_path):
     edges = np.loadtxt(edge_list_path, dtype=np.int32)
     n = edges.max() + 1
@@ -31,7 +28,6 @@ def flatten_adj_list(adj):
     return flat_adj, start_idx
 
 
-# IC Model
 @njit
 def run_IC(flat_adj, start_idx, seeds, p):
     n = len(start_idx) - 1
@@ -55,6 +51,7 @@ def run_IC(flat_adj, start_idx, seeds, p):
                 active[v] = 1
                 queue[q_len] = v
                 q_len += 1
+
     return active.sum()
 
 
@@ -66,69 +63,67 @@ def estimate_spread(flat_adj, start_idx, seeds, MC, p):
     return total / MC
 
 
-def compute_init_gains(flat_adj, start_idx, nodes, MC, p):
-    heap = []
-    for v in tqdm(nodes, desc="Computing initial gains"):
-        gain = estimate_spread(flat_adj, start_idx, [v], MC, p)
-        heapq.heappush(heap, (-gain, v, 0))  # max heap
-    return heap
-
-
-# CELF-K Algo choose how many nodes
-def CELF_K(flat_adj, start_idx, k=5, MC_init=10, MC_final=100, p=0.1):
+def greedy_naive(flat_adj, start_idx, k=5, MC=100, p=0.1):
     n = len(start_idx) - 1
     nodes = list(range(n))
     selected = []
-    heap = compute_init_gains(flat_adj, start_idx, nodes, MC_init, p)
     current_spread = 0.0
 
-    while len(selected) < k:
-        neg_gain, v, last_updated = heapq.heappop(heap)
-        if v in selected:
-            continue
+    for step in range(k):
+        best_node = -1
+        best_gain = -1.0
 
-        if last_updated != len(selected):
+        for v in tqdm(nodes, desc=f"Iteration {step+1}/{k}"):
+            if v in selected:
+                continue
+
             spread_with_v = estimate_spread(
-                flat_adj, start_idx, selected + [v], MC_init, p
+                flat_adj, start_idx, selected + [v], MC, p
             )
             marginal_gain = spread_with_v - current_spread
-            heapq.heappush(heap, (-marginal_gain, v, len(selected)))
-            continue
 
-        selected.append(v)
+            if marginal_gain > best_gain:
+                best_gain = marginal_gain
+                best_node = v
 
-        current_spread = estimate_spread(flat_adj, start_idx, selected, MC_final, p)
+        selected.append(best_node)
+        current_spread = estimate_spread(
+            flat_adj, start_idx, selected, MC, p
+        )
+
         print(
-            f"Selected {v}, marginal gain = {-neg_gain:.2f}, current spread = {current_spread:.2f}"
+            f"Selected {best_node}, marginal gain = {best_gain:.2f}, "
+            f"current spread = {current_spread:.2f}"
         )
 
     return set(selected), current_spread
 
 
-def main(path, k = 5, MC_init = 100, MC_final = 1000, p = 0.1):
-    path_to_list = path
-
+def main(path, k=5, MC=1000, p=0.1):
     print("Building adjacency list...")
     start_time = time.time()
-    adj = build_adj_list(path_to_list)
+
+    adj = build_adj_list(path)
     flat_adj, start_idx = flatten_adj_list(adj)
 
-    print("Running CELF-K...")
-    chosen_nodes, spread = CELF_K(flat_adj, start_idx, k, MC_init, MC_final, p)
+    print("Running Naive Greedy...")
+    chosen_nodes, spread = greedy_naive(flat_adj, start_idx, k, MC, p)
 
     print("\nChosen nodes:", chosen_nodes)
     print(f"Estimated spread: {spread:.2f}")
     print(f"Elapsed time: {time.time() - start_time:.2f} seconds")
+
     return chosen_nodes, spread
-    
+
+
 if __name__ == "__main__":
     np.random.seed(2)
-    path = ("2007-cost-effective-outbreak-detection-in-networks/Data/soc-LiveJournal1.txt")
+
+    path = "2007-cost-effective-outbreak-detection-in-networks/facebook_combined.txt"
+
     # Parameters
-    k = 5                # Number of seeds
-    MC_init = 100       # MC for lazy recomputations
-    MC_final = 1000      # MC for final spread estimates
-    p = 0.1              # Transmission probability
-    
-    main(path, k, MC_init, MC_final, p)
-    
+    k = 5
+    MC = 100
+    p = 0.1
+
+    main(path, k, MC, p)
