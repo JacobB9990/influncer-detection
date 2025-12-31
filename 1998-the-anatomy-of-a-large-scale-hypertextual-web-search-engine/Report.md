@@ -13,7 +13,7 @@ They modeled the Web as a directed graph where:
 - **Nodes** web pages
 - **Edges** hyperlinks
 
-PageRank is defined recursively. If page $ A $ has inbound links from pages $ T_1, T_2, \dots , T_n $ then:
+PageRank is defined recursively. If page $A$ has inbound links from pages $T_1, T_2, \dots , T_n$ then:
 
 $$
 PR(A) = (1 - d) + d \left( 
@@ -23,8 +23,8 @@ PR(A) = (1 - d) + d \left(
 \right)
 $$
 
-- $ C(T_i) $ number of outbound links from page $ T_i $
-- $ d $ damping factor (usually set to 0.85)
+- $C(T_i)$ number of outbound links from page $T_i$
+- $d$ damping factor (usually set to 0.85)
 
 ## Implementation
 My implementaion uses the iterative power method implementation of PageRank. The algorithm starts with an initial guess for the PageRank of each page (usually 1/N, where N is the total number of pages) and iteratively updates the PageRank values until they converge to a stable state.
