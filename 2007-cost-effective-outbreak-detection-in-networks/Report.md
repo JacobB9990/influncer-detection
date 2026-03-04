@@ -136,10 +136,35 @@ The first selected node accounts for most of the spread (~ 2900 activations), in
 
 
 ## Limitations
+There are several important limitations in our experimental setup.
 
+First, the Independent Cascade (IC) model assumes a **uniform transmission probability** $p=0.1$ across all edges. In real-world social or epidemiological networks, transmission probabilities are highly heterogeneous. The strength of relationships, frequency of interaction, and contextual factors all influence diffusion likelihood. A fixed $p$ oversimplifies this complexity and may distort the true dynamics of spread.
+
+Second, the IC model assumes that activation attempts are independent and that each node has only one chance to activate its neighbors. Real outbreaks often involve repeated exposures, reinforcement effects, and correlated behaviors. Human behavior, in particular, is rarely independent, social reinforcement and clustering can significantly alter cascade dynamics.
+
+Third, we assume a static network structure. In reality, networks evolve over time: friendships form and dissolve, interaction frequencies change, and external events reshape connectivity patterns. A dynamic network could significantly impact both outbreak progression and optimal sensor placement.
+
+Fourth, our cost model is simplified. Node cost is proportional to degree:
+$$c(v) = 1.0 + 0.01 \cdot deg(v)$$
+
+While intuitive, real-world monitoring costs depend on infrastructure constraints, geography, accessibility, and political considerations. Degree-based cost serves as a proxy but may not reflect operational realities.
+
+Finally, Monte Carlo simulation introduces estimation noise. Although we used $MC_{final} =1000$
+
+for final spread estimation, the results remain stochastic approximations. Increasing simulation counts would improve accuracy but at additional computational expense.
+
+Together, these assumptions make our framework a controlled abstraction rather than a complete real-world model. The purpose of this study is to evaluate algorithmic behavior under standard diffusion assumptions, not to perfectly replicate real outbreak dynamics.
 
 ## Conclusion
+In this study, we implemented the greedy and CELF algorithms for cost-effective outbreak detection on the Facebook Ego Network dataset. By modeling outbreak detection as a submodular penalty reduction problem, we leveraged theoretical guarantees that ensure a $(1 - 1/e)$ approximation to the optimal solution.
 
+Empirically, CELF achieved nearly identical detection performance compared to the Naive Greedy baseline while reducing runtime by approximately 2.6 times. Although our graph size was moderate, the observed efficiency gain supports prior findings that lazy evaluation significantly reduces redundant marginal gain computations in practice.
+
+The rapid decay in marginal gains across seed selections demonstrated clear diminishing returns, validating the submodular structure underlying the objective function. This structural property enables both strong approximation guarantees and practical scalability.
+
+While our model relies on simplifying assumptions such as uniform transmission probabilities, independent cascades, static networks, and degree-based costs, the results highlight the strength of submodular optimization as a general framework for sensor placement and monitoring in networks.
+
+Future work could incorporate heterogeneous diffusion probabilities, temporal network dynamics, and more realistic cost structures. More broadly, this framework connects outbreak detection to influence maximization and network monitoring, illustrating how mathematical structure enables efficient and near-optimal decision making in complex systems.
 
 ## References
 - Leskovec, Jure, et al. "Cost-effective Outbreak Detection in Networks." *Proceedings of the 13th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD '07)*, 12-15 Aug. 2007, San Jose, California. Carnegie Mellon University, 2007. [https://www.cs.cmu.edu/~jure/pubs/detect-kdd07.pdf](https://www.cs.cmu.edu/~jure/pubs/detect-kdd07.pdf).
