@@ -119,12 +119,20 @@ Elapsed time: 1172.47 seconds
 ```
 
 ### Detection Performance
+Both the Naive and CELF Algorithms achieve nearly identical spread estimates. Naive being about 3048 estimated and CELF being about 3039. Since both algorithms optimize the same submodular reward function $R(A)$, this confirms that CELF preserves solution quality while avoiding redundant computations. 
 
+The marginal gains decrease rapidly across iterations $(\approx 2930 \rightarrow 108 \rightarrow 31 \rightarrow 25 \rightarrow 18)$, showing clear diminishing returns, evidence of submodularity.
 
+The small variation between solutions can be due to Monte Carlo noise rather than algorithmic differences.
 ### Runtime Performance
+CELF completed in about 450 seconds compared to 1172 seconds for Naive Greedy, that is about a 2.6x speed up. The improvement arises form CELF's laze evaluation strategy, which avoid recomputing marginal gains for all nodes at every iteration.
 
+Instead, only the top candidate's gain is recomputed until its priority is confirmed. This significantly reduces the number of Monte Carlo simulations required.
+
+Now in the paper it said up to 700x speed up. However, our graph is moderate in scale (4039 nodes), the performance gap would grow substantially on larger networks.
 
 ## Analysis & Discussion
+The first selected node accounts for most of the spread (~ 2900 activations), indicating the presence of highly central hubs in the Facebook ego network. Subsequent nodes provide diminishing incremental coverage due to overlap in reachable regions of the graph.
 
 
 ## Limitations
